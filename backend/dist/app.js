@@ -8,6 +8,14 @@ const cluster_1 = __importDefault(require("cluster"));
 const os_1 = __importDefault(require("os"));
 require("dotenv/config");
 const app = (0, express_1.default)();
+// Root route
+app.get('/', (_, res, next) => {
+    res.send('WELCOME KWAME AI');
+});
+// "Route not found" handler
+app.all('*', (_, res) => {
+    res.status(404).json({ error: '404 Not Found' });
+});
 // CLUSTERING
 const numCPUs = os_1.default.cpus().length;
 if (cluster_1.default.isPrimary) {

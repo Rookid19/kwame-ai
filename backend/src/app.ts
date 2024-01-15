@@ -6,6 +6,17 @@ import bodyParser from 'body-parser';
 
 const app = express();
 
+
+// Root route
+app.get('/', (_, res, next) => {
+    res.send('WELCOME KWAME AI');
+});
+
+// "Route not found" handler
+app.all('*', (_, res) => {
+    res.status(404).json({ error: '404 Not Found' });
+});
+
 // CLUSTERING
 const numCPUs = os.cpus().length;
 
