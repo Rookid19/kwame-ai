@@ -33,6 +33,8 @@ export default function Home() {
       console.error("Error creating note:", error);
     }
   };
+
+  
   return (
     <>
       <Head>
