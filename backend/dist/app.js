@@ -11,6 +11,7 @@ const app = (0, express_1.default)();
 app.get('/', (_, res, next) => {
     res.send(`WELCOME KWAME AI`);
 });
+// Get all notes
 app.get('/notes', (req, res) => {
     const selectQuery = 'SELECT * FROM notes';
     db_1.default.query(selectQuery, (err, result) => {
@@ -26,7 +27,6 @@ app.get('/notes', (req, res) => {
 app.all('*', (_, res) => {
     res.status(404).json({ error: '404 Not Found' });
 });
-// Get all notes
 const port = process.env.PORT || 8000;
 app.listen(port, () => {
     console.log(`Worker process ${process.pid} listening on port ${port}`);
