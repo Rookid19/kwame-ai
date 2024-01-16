@@ -3,7 +3,7 @@ import 'dotenv/config';
 
 
 
-const db_connection = mysql.createConnection({
+const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
@@ -12,7 +12,7 @@ const db_connection = mysql.createConnection({
 });
 
 
-db_connection.connect((err) => {
+db.connect((err) => {
     if (err) {
         console.error("Error connecting to MySQL:", err);
         return;
@@ -20,5 +20,5 @@ db_connection.connect((err) => {
     console.log('Connected to MySQL!')
 });
 
-export default db_connection;
+export default db;
 
