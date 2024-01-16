@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateNotes = exports.addNotes = exports.getNotes = void 0;
+exports.deleteNotes = exports.updateNotes = exports.addNotes = exports.getNotes = void 0;
 const db_1 = __importDefault(require("../config/db"));
 const getNotes = (_, res, next) => {
     const selectQuery = 'SELECT * FROM notes';
@@ -18,9 +18,10 @@ const getNotes = (_, res, next) => {
 };
 exports.getNotes = getNotes;
 const addNotes = (req, res, next) => {
+    // title converted to uppercase
     const { title, body } = req.body;
     const insertQuery = 'INSERT INTO notes (title, body) VALUES (?, ?)';
-    db_1.default.query(insertQuery, [title, body], (err, result) => {
+    db_1.default.query(insertQuery, [title.toUpperCase(), body], (err, result) => {
         if (err) {
             next(err);
         }
@@ -44,3 +45,16 @@ const updateNotes = (req, res, next) => {
     });
 };
 exports.updateNotes = updateNotes;
+const deleteNotes = (req, res, next) => {
+    const { id } = req.params;
+    const deleteQuery = 'DELETE FROM notes WHERE id = ?';
+    db_1.default.query(deleteQuery, [id], (err, result) => {
+        if (err) {
+            next(err);
+        }
+        else {
+            res.status(200).json({ message: 'Note deleted successfully', result });
+        }
+    });
+};
+exports.deleteNotes = deleteNotes;

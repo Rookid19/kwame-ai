@@ -7,4 +7,5 @@ const router = (0, express_1.Router)();
 router.get('/all', notes_1.getNotes);
 router.post('/add', validate_1.validateAddNotes, notes_1.addNotes);
 router.put('/modify/:id', validate_1.validateAddNotes, notes_1.updateNotes);
+router.delete('/delete/:id', notes_1.deleteNotes);
 exports.default = router;
