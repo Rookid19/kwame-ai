@@ -6,10 +6,11 @@ import bodyParser from 'body-parser';
 
 const app = express();
 
+const numCPUs = os.cpus().length;
 
 // Root route
 app.get('/', (_, res, next) => {
-    res.send('WELCOME KWAME AI');
+    res.send(`WELCOME KWAME AI ${numCPUs}`);
 });
 
 // "Route not found" handler
@@ -18,7 +19,6 @@ app.all('*', (_, res) => {
 });
 
 // CLUSTERING
-const numCPUs = os.cpus().length;
 
 if (cluster.isPrimary) {
     console.log(`Master process is running with process ID ${process.pid}`);
@@ -37,7 +37,7 @@ if (cluster.isPrimary) {
         cluster.fork();
     });
 } else {
-    const port = process.env.PORT || 3003;
+    const port = 8000;
     app.listen(port, () => {
         console.log(`Worker process ${process.pid} listening on port ${port}`);
     });
