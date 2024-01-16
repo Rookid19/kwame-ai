@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addNotes = exports.getNotes = void 0;
+exports.updateNotes = exports.addNotes = exports.getNotes = void 0;
 const db_1 = __importDefault(require("../config/db"));
 const getNotes = (_, res, next) => {
     const selectQuery = 'SELECT * FROM notes';
@@ -30,3 +30,6 @@ const addNotes = (req, res, next) => {
     });
 };
 exports.addNotes = addNotes;
+const updateNotes = (req, res, next) => {
+};
+exports.updateNotes = updateNotes;

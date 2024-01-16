@@ -25,3 +25,7 @@ export const addNotes = (req: Request, res: Response, next: NextFunction) => {
         }
     });
 }
+
+export const updateNotes = (req: Request, res: Response, next: NextFunction) => {
+
+}
