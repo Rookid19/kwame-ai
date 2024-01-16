@@ -1,3 +1,4 @@
+import { fetcher } from "@/services/global/api";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -11,12 +12,12 @@ function Notes({}) {
   }, []);
 
   const fetchNotes = async () => {
-    try {
-      const response = await axios.get("http://localhost:3000/notes");
-      setNotes(response.data);
-    } catch (error) {
-      console.error("Error fetching notes:", error);
-    }
+    // try {
+    //   const response = await axios.get("http://localhost:3000/notes");
+    //   setNotes(response.data);
+    // } catch (error) {
+    //   console.error("Error fetching notes:", error);
+    // }
   };
 
   const handleInputChange = (e: any) => {
@@ -25,48 +26,48 @@ function Notes({}) {
   };
 
   const handleCreateNote = async () => {
-    try {
-      await axios.post("http://localhost:3000/notes", newNote);
-      fetchNotes(); // Refresh the notes after creating a new one
-    } catch (error) {
-      console.error("Error creating note:", error);
-    }
+    await fetcher<ResponseType>("/add", "POST", newNote)
+      .then((data) => {
+        console.log(data);
+        // setNotes([...notes, data])
+      })
+      .finally(() => {});
   };
   return (
     <div>
+      {JSON.stringify(newNote)}
+
+      <h1>Notes App</h1>
       <div>
-        <h1>Notes App</h1>
+        <h2>Create a New Note</h2>
         <div>
-          <h2>Create a New Note</h2>
-          <div>
-            <label>Title:</label>
-            <input
-              type="text"
-              name="title"
-              value={newNote.title}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div>
-            <label>Body:</label>
-            <textarea
-              name="body"
-              value={newNote.body}
-              onChange={handleInputChange}
-            />
-          </div>
-          <button onClick={handleCreateNote}>Create Note</button>
+          <label>Title:</label>
+          <input
+            type="text"
+            name="title"
+            value={newNote.title}
+            onChange={handleInputChange}
+          />
         </div>
         <div>
-          <h2>All Notes</h2>
-          <ul>
-            {notes.map((note: any) => (
-              <li key={note.id}>
-                <strong>{note.title}</strong>: {note.body}
-              </li>
-            ))}
-          </ul>
+          <label>Body:</label>
+          <textarea
+            name="body"
+            value={newNote.body}
+            onChange={handleInputChange}
+          />
         </div>
+        <button onClick={handleCreateNote}>Create Note</button>
+      </div>
+      <div>
+        <h2>All Notes</h2>
+        <ul>
+          {notes.map((note: any) => (
+            <li key={note.id}>
+              <strong>{note.title}</strong>: {note.body}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
