@@ -4,7 +4,7 @@ import { body, validationResult } from 'express-validator';
 
 
 export const validateAddNotes = [
- 
+
     body('title').notEmpty().withMessage('Title cannot be empty'),
     body('body').notEmpty().withMessage('Body cannot be empty'),
 
@@ -12,7 +12,7 @@ export const validateAddNotes = [
     (req: Request, res: Response, next: NextFunction) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json({ error: errors.array(), type: "validation" });
         }
         next();
     },
