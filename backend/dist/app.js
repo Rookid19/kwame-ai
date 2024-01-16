@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 require("dotenv/config");
 const body_parser_1 = __importDefault(require("body-parser"));
-const db_1 = __importDefault(require("./config/db"));
 const notes_1 = __importDefault(require("./routes/notes"));
 const app = (0, express_1.default)();
 // MIDDLEWARES
@@ -23,15 +22,16 @@ app.get('/', (_, res, next) => {
 });
 // Get all notes
 app.use('/api/v1/notes', notes_1.default);
-app.get('/notes', (req, res) => {
-    const selectQuery = 'SELECT * FROM notes';
-    db_1.default.query(selectQuery, (err, result) => {
-        if (err) {
-            res.status(500).json({ error: 'Error fetching notes' });
-        }
-        else {
-            res.status(200).json(result);
-        }
+// Error handler middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    // Check if the error has a status code, otherwise default to 500 (Internal Server Error)
+    const statusCode = err.statusCode || 500;
+    res.status(statusCode).json({
+        error: {
+            message: err.message,
+            status: statusCode,
+        },
     });
 });
 // "Route not found" handler

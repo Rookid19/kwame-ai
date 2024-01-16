@@ -1,8 +1,9 @@
-import express from 'express';
+import express, { ErrorRequestHandler, Request, Response, NextFunction } from 'express';
 import 'dotenv/config';
 import bodyParser from 'body-parser';
 import db from './config/db';
 import notesRoute from './routes/notes'
+import { errorProps } from './interface/interface';
 const app = express();
 
 
@@ -26,16 +27,22 @@ app.get('/', (_, res, next) => {
 // Get all notes
 app.use('/api/v1/notes', notesRoute);
 
-app.get('/notes', (req, res) => {
-    const selectQuery = 'SELECT * FROM notes';
-    db.query(selectQuery, (err, result) => {
-        if (err) {
-            res.status(500).json({ error: 'Error fetching notes' });
-        } else {
-            res.status(200).json(result);
-        }
+// Error handler middleware
+
+app.use((err: errorProps, req: Request, res: Response, next: NextFunction) => {
+    console.error(err.stack);
+
+    // Check if the error has a status code, otherwise default to 500 (Internal Server Error)
+    const statusCode = (err as any).statusCode || 500;
+
+    res.status(statusCode).json({
+        error: {
+            message: err.message,
+            status: statusCode,
+        },
     });
 });
+
 
 // "Route not found" handler
 app.all('*', (_, res) => {
