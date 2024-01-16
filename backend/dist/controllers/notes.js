@@ -31,5 +31,16 @@ const addNotes = (req, res, next) => {
 };
 exports.addNotes = addNotes;
 const updateNotes = (req, res, next) => {
+    const { title, body } = req.body;
+    const { id } = req.params;
+    const updateQuery = 'UPDATE notes SET title = ?, body = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?';
+    db_1.default.query(updateQuery, [title, body, id], (err, result) => {
+        if (err) {
+            next(err);
+        }
+        else {
+            res.status(200).json({ message: 'Note updated successfully', result });
+        }
+    });
 };
 exports.updateNotes = updateNotes;

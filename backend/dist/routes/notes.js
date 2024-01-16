@@ -6,5 +6,5 @@ const validate_1 = require("../middlewares/validate");
 const router = (0, express_1.Router)();
 router.get('/all', notes_1.getNotes);
 router.post('/add', validate_1.validateAddNotes, notes_1.addNotes);
-router.post('/modify', validate_1.validateAddNotes, notes_1.updateNotes);
+router.put('/modify/:id', validate_1.validateAddNotes, notes_1.updateNotes);
 exports.default = router;

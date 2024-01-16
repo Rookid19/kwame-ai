@@ -7,6 +7,6 @@ const router = Router();
 
 router.get('/all', getNotes);
 router.post('/add', validateAddNotes, addNotes);
-router.post('/modify', validateAddNotes, updateNotes);
+router.put('/modify/:id', validateAddNotes, updateNotes);
 
 export default router;
