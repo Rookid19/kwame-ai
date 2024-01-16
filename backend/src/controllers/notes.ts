@@ -17,7 +17,7 @@ export const addNotes = (req: Request, res: Response, next: NextFunction) => {
     // title converted to uppercase
     const { title, body } = req.body;
     const insertQuery = 'INSERT INTO notes (title, body) VALUES (?, ?)';
-    db.query(insertQuery, [title.toUpperCase(), body], (err, result) => {
+    db.query(insertQuery, [title.toUpperCase().trim(), body.trim()], (err, result) => {
         if (err) {
             next(err)
         } else {
@@ -30,7 +30,7 @@ export const updateNotes = (req: Request, res: Response, next: NextFunction) => 
     const { title, body } = req.body;
     const { id } = req.params;
     const updateQuery = 'UPDATE notes SET title = ?, body = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?';
-    db.query(updateQuery, [title, body, id], (err, result) => {
+    db.query(updateQuery, [title.trim(), body.trim(), id.trim()], (err, result) => {
         if (err) {
             next(err)
         } else {
@@ -42,7 +42,7 @@ export const updateNotes = (req: Request, res: Response, next: NextFunction) => 
 export const deleteNotes = (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const deleteQuery = 'DELETE FROM notes WHERE id = ?';
-    db.query(deleteQuery, [id], (err, result) => {
+    db.query(deleteQuery, [id.trim()], (err, result) => {
         if (err) {
             next(err)
         } else {

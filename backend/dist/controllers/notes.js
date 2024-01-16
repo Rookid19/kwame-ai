@@ -21,7 +21,7 @@ const addNotes = (req, res, next) => {
     // title converted to uppercase
     const { title, body } = req.body;
     const insertQuery = 'INSERT INTO notes (title, body) VALUES (?, ?)';
-    db_1.default.query(insertQuery, [title.toUpperCase(), body], (err, result) => {
+    db_1.default.query(insertQuery, [title.toUpperCase().trim(), body.trim()], (err, result) => {
         if (err) {
             next(err);
         }
@@ -35,7 +35,7 @@ const updateNotes = (req, res, next) => {
     const { title, body } = req.body;
     const { id } = req.params;
     const updateQuery = 'UPDATE notes SET title = ?, body = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?';
-    db_1.default.query(updateQuery, [title, body, id], (err, result) => {
+    db_1.default.query(updateQuery, [title.trim(), body.trim(), id.trim()], (err, result) => {
         if (err) {
             next(err);
         }
@@ -48,7 +48,7 @@ exports.updateNotes = updateNotes;
 const deleteNotes = (req, res, next) => {
     const { id } = req.params;
     const deleteQuery = 'DELETE FROM notes WHERE id = ?';
-    db_1.default.query(deleteQuery, [id], (err, result) => {
+    db_1.default.query(deleteQuery, [id.trim()], (err, result) => {
         if (err) {
             next(err);
         }
