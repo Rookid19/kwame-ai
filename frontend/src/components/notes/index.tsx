@@ -37,7 +37,7 @@ function Notes({}) {
     <div>
       {JSON.stringify(newNote)}
 
-      <h1>Notes App</h1>
+      {/* <h1>Notes App</h1> */}
       <div>
         <h2>Create a New Note</h2>
         <div>
