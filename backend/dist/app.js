@@ -5,13 +5,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 require("dotenv/config");
+const body_parser_1 = __importDefault(require("body-parser"));
 const db_1 = __importDefault(require("./config/db"));
+const notes_1 = __importDefault(require("./routes/notes"));
 const app = (0, express_1.default)();
+// MIDDLEWARES
+app.use(body_parser_1.default.json());
+app.use((_, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+});
 // Root route
 app.get('/', (_, res, next) => {
     res.send(`WELCOME KWAME AI`);
 });
 // Get all notes
+app.use('/api/v1/notes', notes_1.default);
 app.get('/notes', (req, res) => {
     const selectQuery = 'SELECT * FROM notes';
     db_1.default.query(selectQuery, (err, result) => {

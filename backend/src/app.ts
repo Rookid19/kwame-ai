@@ -2,8 +2,21 @@ import express from 'express';
 import 'dotenv/config';
 import bodyParser from 'body-parser';
 import db from './config/db';
-
+import notesRoute from './routes/notes'
 const app = express();
+
+
+// MIDDLEWARES
+app.use(bodyParser.json());
+app.use((_, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader(
+        'Access-Control-Allow-Methods',
+        'OPTIONS, GET, POST, PUT, PATCH, DELETE'
+    );
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+});
 
 // Root route
 app.get('/', (_, res, next) => {
@@ -11,6 +24,8 @@ app.get('/', (_, res, next) => {
 });
 
 // Get all notes
+app.use('/api/v1/notes', notesRoute);
+
 app.get('/notes', (req, res) => {
     const selectQuery = 'SELECT * FROM notes';
     db.query(selectQuery, (err, result) => {
