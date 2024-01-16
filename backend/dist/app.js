@@ -24,15 +24,19 @@ app.get('/', (_, res, next) => {
 app.use('/api/v1/notes', notes_1.default);
 // Error handler middleware
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    // Check if the error has a status code, otherwise default to 500 (Internal Server Error)
-    const statusCode = err.statusCode || 500;
-    res.status(statusCode).json({
+    console.error(err);
+    let errorResponse = {
         error: {
             message: err.message,
-            status: statusCode,
+            status: err.statusCode || 500,
         },
-    });
+    };
+    if (err.code === 'ER_DUP_ENTRY') {
+        // If the error code is a duplicate entry error, update the errorResponse
+        errorResponse.error.message = 'Note title already exists';
+        errorResponse.error.status = 400;
+    }
+    res.status(errorResponse.error.status).json(errorResponse);
 });
 // "Route not found" handler
 app.all('*', (_, res) => {

@@ -3,7 +3,7 @@ import 'dotenv/config';
 import bodyParser from 'body-parser';
 import db from './config/db';
 import notesRoute from './routes/notes'
-import { errorProps } from './interface/interface';
+import { errorProps, errorResponse } from './interface/interface';
 const app = express();
 
 
@@ -30,17 +30,22 @@ app.use('/api/v1/notes', notesRoute);
 // Error handler middleware
 
 app.use((err: errorProps, req: Request, res: Response, next: NextFunction) => {
-    console.error(err.stack);
+    console.error(err);
 
-    // Check if the error has a status code, otherwise default to 500 (Internal Server Error)
-    const statusCode = (err as any).statusCode || 500;
-
-    res.status(statusCode).json({
+    let errorResponse: errorResponse = {
         error: {
             message: err.message,
-            status: statusCode,
+            status: (err as any).statusCode || 500,
         },
-    });
+    };
+
+    if (err.code === 'ER_DUP_ENTRY') {
+        // If the error code is a duplicate entry error, update the errorResponse
+        errorResponse.error.message = 'Note title already exists';
+        errorResponse.error.status = 400;
+    }
+
+    res.status(errorResponse.error.status).json(errorResponse);
 });
 
 

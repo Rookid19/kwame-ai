@@ -25,7 +25,7 @@ const addNotes = (req, res, next) => {
             next(err);
         }
         else {
-            res.status(201).json({ message: 'Note created successfully' });
+            res.status(201).json({ message: 'Note created successfully', result });
         }
     });
 };
