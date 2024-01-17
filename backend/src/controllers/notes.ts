@@ -30,7 +30,7 @@ export const updateNotes = (req: Request, res: Response, next: NextFunction) => 
     const { title, body } = req.body;
     const { id } = req.params;
     const updateQuery = 'UPDATE notes SET title = ?, body = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?';
-    db.query(updateQuery, [title.trim(), body.trim(), id.trim()], (err, result) => {
+    db.query(updateQuery, [title.toUpperCase().trim(), body.trim(), id.trim()], (err, result) => {
         if (err) {
             next(err)
         } else {

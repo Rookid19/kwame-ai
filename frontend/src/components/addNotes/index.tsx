@@ -7,38 +7,61 @@ import { fetchNotesData } from "@/slices/notesSlice";
 import { useDispatch } from "react-redux";
 
 export default function AddNotes() {
-  const [newNote, setNewNote] = useState({ title: "", body: "" });
-  const dispatch = useDispatch();
+ // State to manage the details of a new note.
+const [newNote, setNewNote] = useState({ title: "", body: "" });
 
-  const handleCreateNote = async () => {
-    await fetcher<ResponseType>("/add", "POST", newNote)
-      .then((data: any) => {
-        if (data.status === 201) {
-          toast.success(data.data.message, {
-            position: "top-center",
-          });
-          fetchNotes();
-        }
-        // setNotes([...notes, data])
-      })
-      .finally(() => {
-        setNewNote({
-          title: "",
-          body: "",
+// Dispatch function from Redux to dispatch actions.
+const dispatch = useDispatch();
+
+/**
+ * Handles the creation of a new note.
+ */
+const handleCreateNote = async () => {
+  // Make an API call to add a new note.
+  await fetcher<ResponseType>("/add", "POST", newNote)
+    .then((data: any) => {
+      if (data.status === 201) {
+        // Display a success toast message.
+        toast.success(data.data.message, {
+          position: "top-center",
         });
-      });
-  };
 
-  const fetchNotes = async () => {
-    await fetcher("/all").then((res: any) => {
-      console.log(res.data);
-      dispatch(fetchNotesData(res.data));
+        // Fetch updated notes after successful creation.
+        fetchNotes();
+      }
+      // setNotes([...notes, data])
+    })
+    .finally(() => {
+      // Reset the newNote state after creating a note.
+      setNewNote({
+        title: "",
+        body: "",
+      });
     });
-  };
-  const handleInputChange = (e: any) => {
-    const { name, value } = e.target;
-    setNewNote((prevNote) => ({ ...prevNote, [name]: value }));
-  };
+};
+
+/**
+ * Fetches notes from the server and updates the Redux store.
+ */
+const fetchNotes = async () => {
+  // Make an API call to fetch all notes.
+  await fetcher("/all").then((res: any) => {
+    console.log(res.data);
+    // Dispatch the fetched notes data to the Redux store.
+    dispatch(fetchNotesData(res.data));
+  });
+};
+
+/**
+ * Handles input changes for creating a new note.
+ * @param e - The event object containing information about the input change.
+ */
+const handleInputChange = (e: any) => {
+  const { name, value } = e.target;
+
+  // Update the newNote state with the latest input values.
+  setNewNote((prevNote) => ({ ...prevNote, [name]: value }));
+};
 
   return (
     <Card variant="outlined" className={styles.card}>

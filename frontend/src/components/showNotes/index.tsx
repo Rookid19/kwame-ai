@@ -13,39 +13,60 @@ export default function ShowNotes({}: Props) {
   const [open, setOpen] = React.useState(false);
   const [newNote, setNewNote] = useState<any>({ title: "", body: "", id: "" });
 
-  const notes = useSelector(notesData);
-  const dispatch = useDispatch();
+  // Selects notes data from the Redux store.
+const notes = useSelector(notesData);
 
-  const EditNote = (item: any) => {
-    setOpen(true);
-    setNewNote({
-      title: item.title,
-      body: item.body,
-      id: item.id,
-    });
-  };
+// Dispatch function from Redux to dispatch actions.
+const dispatch = useDispatch();
 
-  const deleteNote = (item: any) => {
-    fetcher(`/delete/${item.id}`, "DELETE").then((res) => {
-      console.log(res);
-      fetchNotes();
-    });
-  };
+/**
+ * Opens the modal for editing a note.
+ * @param item - The note item to be edited.
+ */
+const EditNote = (item: any) => {
+  setOpen(true);
+  setNewNote({
+    title: item.title,
+    body: item.body,
+    id: item.id,
+  });
+};
 
-  const fetchNotes = async () => {
-    await fetcher("/all").then((res: any) => {
-      console.log(res.data);
-      dispatch(fetchNotesData(res.data));
-    });
-  };
-
-  useEffect(() => {
+/**
+ * Deletes a note.
+ * @param item - The note item to be deleted.
+ */
+const deleteNote = (item: any) => {
+  // Calls the delete API endpoint and logs the response.
+  fetcher(`/delete/${item.id}`, "DELETE").then((res) => {
+    console.log(res);
+    // Fetches updated notes after deletion.
     fetchNotes();
-  }, []);
+  });
+};
 
-  if (notes.length === 0) {
-    return <div className={styles.info}>No data available yet...</div>;
-  }
+/**
+ * Fetches notes from the server and updates the Redux store.
+ */
+const fetchNotes = async () => {
+  // Calls the fetch API endpoint and logs the response data.
+  await fetcher("/all").then((res: any) => {
+    console.log(res.data);
+    // Dispatches the fetched notes data to the Redux store.
+    dispatch(fetchNotesData(res.data));
+  });
+};
+
+// Fetches notes when the component mounts.
+useEffect(() => {
+  fetchNotes();
+}, []);
+
+// Renders a message when there are no notes available.
+if (notes.length === 0) {
+  return <div className={styles.info}>No data available yet...</div>;
+}
+
 
   return (
     <div>
@@ -57,8 +78,6 @@ export default function ShowNotes({}: Props) {
         newNote={newNote}
         setNewNote={setNewNote}
       />
-      {/* {JSON.stringify(notes)} */}
-
       <div className={styles.container}>
         {notes.map((item: any, i: number) => (
           <Card key={i} className={styles.card}>
@@ -91,61 +110,85 @@ export default function ShowNotes({}: Props) {
 }
 
 function BasicModal({ setOpen, open, fetchNotes, newNote, setNewNote }: any) {
-  const handleClose = () => setOpen(false);
 
-  const [timer, setTimer] = useState<NodeJS.Timeout | any>(null);
-  const [saveListener, setSaveListener] = useState<any>(false);
-  const [info, setInfo] = useState<any>("");
+  // Closes the modal.
+const handleClose = () => setOpen(false);
 
-  // Function to save text to the database
-  async function saveTextToDatabase() {
-    // Make your API call to save the text to MySQL database here
+// State to manage the timer for debouncing input changes.
+const [timer, setTimer] = useState<NodeJS.Timeout | any>(null);
 
-    await fetcher<ResponseType>(`/modify/${newNote.id}`, "PUT", newNote)
-      .then((data: any) => {
-        if (data.status === 200) {
-          setInfo("Saved");
-          fetchNotes();
-        }
-        // setNotes([...notes, data])
-      })
-      .finally(() => {
-        setTimeout(() => {
-          setInfo("");
-        }, 4000);
-      });
-  }
-  const handleInputChange = (e: any) => {
-    setInfo("Saving...");
-    const { name, value } = e.target;
+// State to manage whether the save event has occurred.
+const [saveListener, setSaveListener] = useState<any>(false);
 
-    setNewNote((prevNote: any) => ({
-      ...prevNote,
-      [name]: value,
-    }));
+// State to display information about the save status.
+const [info, setInfo] = useState<any>("");
 
-    // Reset the timer on each input change
-    clearTimeout(timer);
+/**
+ * Function to save text to the database.
+ */
+async function saveTextToDatabase() {
+  // Make an API call to save the text to the MySQL database.
 
-    // Set a new timer for 1 second (adjust as needed)
-    setTimer(
+  await fetcher<ResponseType>(`/modify/${newNote.id}`, "PUT", newNote)
+    .then((data: any) => {
+      if (data.status === 200) {
+        setInfo("Saved");
+        fetchNotes();
+      }
+      // setNotes([...notes, data])
+    })
+    .finally(() => {
+      // Clear the info message after 4 seconds.
       setTimeout(() => {
-        // Call your API here using the latest state
-        console.log("Call API with input:", newNote); // Note: Use newNote here
+        setInfo("");
+      }, 4000);
+    });
+}
 
-        // Pass the updated state to the function
-        // saveTextToDatabase(newNote);
-        setSaveListener(!saveListener);
-      }, 10000)
-    );
-  };
+/**
+ * Handles input changes and triggers the save operation.
+ * @param e - The event object containing information about the input change.
+ */
+const handleInputChange = (e: any) => {
+  // Display a "Saving..." message.
+  setInfo("Saving...");
 
-  useEffect(() => {
-    if (newNote.title === "" && newNote.body === "") {
-      return;
-    }
-    saveTextToDatabase();
-  }, [saveListener]);
+  const { name, value } = e.target;
+
+  // Update the newNote state with the latest input values.
+  setNewNote((prevNote: any) => ({
+    ...prevNote,
+    [name]: value,
+  }));
+
+  // Reset the timer on each input change.
+  clearTimeout(timer);
+
+  // Set a new timer for 10 seconds to debounce input changes.
+  setTimer(
+    setTimeout(() => {
+      // Call your API here using the latest state.
+      console.log("Call API with input:", newNote); // Note: Use newNote here
+
+      // Trigger the save operation.
+      setSaveListener(!saveListener);
+    }, 1000)
+  );
+};
+
+/**
+ * Effect to save the text to the database when the saveListener changes.
+ */
+useEffect(() => {
+  // Check if both title and body are empty before saving.
+  if (newNote.title === "" && newNote.body === "") {
+    return;
+  }
+
+  // Trigger the save operation.
+  saveTextToDatabase();
+}, [saveListener]);
+
 
   return (
     <div>
