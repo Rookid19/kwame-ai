@@ -4,18 +4,88 @@
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 20px;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
 }
 
 .card {
   width: 300px;
   height: 200px;
+
   /* margin-top: 30px; */
 }
 
+.circle {
+  width: 35px;
+  height: 35px;
+  background-color: #3498db; /* Set the background color */
+  border-radius: 50%; /* Make it a circle by setting border-radius to 50% */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff; /* Set the text color */
+  font-size: 18px;
+  font-weight: bold;
+  /* margin-left: 30px; */
+}
+
+.top{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-inline: 15px;
+  margin-top: 15px;
+}
+
+.title{
+  font-size: 20px;
+  font-weight: bold;
+  color: #000;
+  margin-block: 10px;
+  margin-left: 15px;
+}
+
+.content {
+
+  padding-inline: 15px;
+}
+
+
+
+.info{
+  text-align: center;
+  margin-top: 200px;
+  font-size: 50px;
+}
+
+.icons{
+  cursor: pointer;
+}
+
+.custom_input {
+  width: 300px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  height: 36px;
+}
+.textarea {
+  height: 43px;
+  width: 300px;
+  /* margin-left: 30px; */
+}
+
+.saving{
+  margin-top: 20px;
+  margin-left: -10px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #000;
+}
+
 @media only screen and (max-width: 1592px) {
-  .container {
-    /* grid-template-columns: 1fr 1fr 1fr; */
-  }
+
 }
 @media only screen and (max-width: 1079px) {
   .container {
