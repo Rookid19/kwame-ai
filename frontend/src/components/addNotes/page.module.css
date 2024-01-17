@@ -4,9 +4,19 @@
   /* justify-content: spa; */
 }
 
-.input_containner {
-  /* margin-left: 30px; */
+.variantContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  overflow-x: scroll;
+  min-width: 880px;
+  /* margin-left: 30px;
+  margin-top: 30px; */
 }
+/* .input_containner { */
+/* margin-left: 30px; */
+/* } */
 .custom_input {
   width: 300px;
   padding: 10px;
@@ -14,11 +24,11 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   outline: none;
-  height: 26px;
+  height: 36px;
 }
 .textarea {
   height: 43px;
-  width:300px
+  width: 300px;
   /* margin-left: 30px; */
 }
 .custom_input:focus {
@@ -27,32 +37,41 @@
 }
 
 .card {
-  margin-top: 30px;
-  width: 70%;
-  padding-inline: 50px;
+  /* margin-top: 30px; */
+  /* width:100%; */
+  /* padding-inline: 50px; */
   padding-bottom: 40px;
+  /* background-color: red; */
+  /* min-width: 300px; */
 }
 
 .textarea_wrapper {
   margin-left: 30px;
 }
 
-.button{
-    margin-left: 30px;
-    margin-top: 12px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    outline: none;
-    height: 50px;
-    background-color: #000;
-    color: white;
-    cursor: pointer;
-    width: 150px;
+.button {
+  margin-left: 30px;
+  margin-top: 12px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  height: 50px;
+  background-color: #000;
+  color: white;
+  cursor: pointer;
+  width: 150px;
 }
 
+/* @media only screen and (max-width: 1592px) {
+  .container {
+      grid-template-columns: 1fr 1fr 1fr; 
+  }
+} */
+
 .title{
-    /* font-size: 40px;
+/* font-size: 40px;
     font-weight: 600; */
+    margin-block: 20px;
 }

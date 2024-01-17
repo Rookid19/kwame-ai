@@ -1,6 +1,8 @@
 .container{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* width: 100%; */
+
+}
+.wrapper{
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 2rem;
 }

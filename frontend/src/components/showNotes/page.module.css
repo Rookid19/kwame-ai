@@ -1,0 +1,24 @@
+.container {
+  padding-top: 3rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.card {
+  width: 300px;
+  height: 200px;
+  /* margin-top: 30px; */
+}
+
+@media only screen and (max-width: 1592px) {
+  .container {
+    /* grid-template-columns: 1fr 1fr 1fr; */
+  }
+}
+@media only screen and (max-width: 1079px) {
+  .container {
+    grid-template-columns: 1fr 1fr;
+  }
+}

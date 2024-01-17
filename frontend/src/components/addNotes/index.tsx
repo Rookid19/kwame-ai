@@ -5,6 +5,7 @@ import { Card } from "@mui/material";
 export default function AddNotes() {
   return (
     <Card variant="outlined" className={styles.card}>
+      <div className={styles.variantContainer}>
       <h1 className={styles.title}>Add Notes</h1>
       <div className={styles.container}>
         <div className={styles.input_containner}>
@@ -28,6 +29,7 @@ export default function AddNotes() {
           />
         </div>
         <button className={styles.button}>Add notes</button>
+      </div>
       </div>
     </Card>
   );
